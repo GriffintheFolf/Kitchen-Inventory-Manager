@@ -1,0 +1,6 @@
+# ignore Python caches and byte-compiled code
+__pycache__/*
+*.pyc
+
+# ignore SQLite databases
+*.db
