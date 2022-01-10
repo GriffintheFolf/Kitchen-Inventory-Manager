@@ -8,5 +8,7 @@ Author: Thomas Sirack
 Date: 2022-01-10
 """
 
+import src.server as server
+
 if __name__ == "__main__":
-  pass
+  server.start_flask()
