@@ -107,6 +107,27 @@ def init_db(CONNECTION, CURSOR):
 
   CONNECTION.commit()
 
+## output ##
+def get_all_items(CURSOR):
+  """
+  Returns all items presently in the database.
+
+  Args:
+    CURSOR (object):
+
+  Returns:
+    ITEMS (list): all items in the database
+  """
+
+  ITEMS = CURSOR.execute("""
+    SELECT
+      *
+    FROM
+      pantry
+  ;""").fetchall()
+
+  return ITEMS
+
 ### "__main__ escape" ###
 if __name__ == "__main__":
   pass

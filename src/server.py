@@ -12,8 +12,12 @@ the pages.
 """
 
 from flask import Flask, render_template, request
+import src.db as db
 
-### Flask-related variables ##
+### other variables ###
+DB_FILENAME = "inventory.db"
+
+### Flask-related variables ###
 APPLICATION = Flask(__name__)
 
 ## page routing ##
@@ -25,7 +29,13 @@ def index():
   The main page of the website (index.html).
   """
 
-  return render_template("index.html")
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  ITEMS = db.get_all_items(CURSOR)
+  db.close_connection(CONNECTION)
+
+  return render_template("index.html", pantry=ITEMS)
 
 ### subroutines ###
 def start_flask():
