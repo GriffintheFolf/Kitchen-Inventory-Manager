@@ -33,6 +33,37 @@
     </header>
 
     <main>
+      <h1>Add Item</h1>
+
+      <form method="POST" action="/">
+        <label for="product_name">
+          Product name:
+          <input type="text" name="product_name" required>
+        </label>
+
+        <label for="item_count">
+          Item count:
+          <input type="text" name="item_count" required>
+        </label>
+
+        <label for="unit_weight">
+          Unit weight:
+          <input type="text" name="unit_weight" required>
+        </label>
+
+        <label for="expiration_date">
+          Expiration date:
+          <input type="date" name="expiration_date" required>
+        </label>
+
+        <label for="barcode_number">
+          Barcode number:
+          <input type="text" name="barcode_number" required>
+        </label>
+
+        <input type="submit" value="Add">
+      </form>
+
       <h1>Current Items in the Pantry</h1>
 
       <table>
