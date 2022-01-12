@@ -17,6 +17,7 @@ from flask import Flask, render_template, request
 import src.db as db
 
 import datetime
+from sqlite3 import IntegrityError
 
 ### other variables ###
 DB_FILENAME = "inventory.db"
@@ -47,19 +48,15 @@ def index():
     EXPIRATION_DATE = request.form.get("expiration_date")
     BARCODE_NUMBER = request.form.get("barcode_number")
 
-    ## check if item already exists ##
-    CONNECTION = db.get_connection(DB_FILENAME)
-    CURSOR = db.get_cursor(CONNECTION)
-
-    if db.get_one_item(CURSOR, BARCODE_NUMBER):
-      ALERT = "An item with the same barcode number already exists."
-
     ## add the item ##
     DATE_FORM = datetime.datetime.strptime(EXPIRATION_DATE, "%Y-%m-%d")
     DATE_FORM = int(datetime.datetime.timestamp(DATE_FORM))
     DATA = [PRODUCT_NAME, UNIT_COUNT, UNIT_WEIGHT, DATE_FORM, BARCODE_NUMBER]
 
-    db.add_item(CONNECTION, CURSOR, DATA)
+    try:
+      db.add_item(CONNECTION, CURSOR, DATA)
+    except IntegrityError:
+      ALERT = "An item with the same barcode already exists!"
 
   ## database items ##
   ITEMS = db.get_all_items(CURSOR)
