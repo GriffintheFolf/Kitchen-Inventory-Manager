@@ -67,6 +67,12 @@ def index():
   db.close_connection(CONNECTION)
 
   # modify Unix timestamp to human readable value #
+  for i in range(len(ITEMS)):
+    DATETIME_DATE = datetime.date.fromtimestamp(ITEMS[i][3])
+    DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "%Y-%m-%d")
+
+    # rather annoyingly, SQLite returns a list of tuples ...
+    ITEMS[i] = (ITEMS[i][0], ITEMS[i][1], ITEMS[i][2], DATETIME_DATE, ITEMS[i][4])
 
   return render_template("index.html", alert=ALERT, pantry=ITEMS)
 
