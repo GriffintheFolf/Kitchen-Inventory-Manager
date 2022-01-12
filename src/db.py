@@ -149,6 +149,8 @@ def get_one_item(CURSOR, BARCODE):
       pantry
     WHERE
       barcode_number = ?
+    SORT BY
+      product_name
   ;""", [BARCODE]).fetchone()
 
   return ITEM
