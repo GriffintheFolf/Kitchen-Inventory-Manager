@@ -35,6 +35,10 @@ def index():
 
   ALERT = ""
 
+  ## open connection right away to avoid issues ##
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
   ## form handling ##
   if request.form:
     PRODUCT_NAME = request.form.get("product_name")
@@ -49,7 +53,6 @@ def index():
 
     if db.get_one_item(CURSOR, BARCODE_NUMBER):
       ALERT = "An item with the same barcode number already exists."
-      db.close_connection(CONNECTION)
 
     ## add the item ##
     DATE_FORM = datetime.datetime.strptime(EXPIRATION_DATE, "%Y-%m-%d")
@@ -57,14 +60,9 @@ def index():
     DATA = [PRODUCT_NAME, UNIT_COUNT, UNIT_WEIGHT, DATE_FORM, BARCODE_NUMBER]
 
     db.add_item(CONNECTION, CURSOR, DATA)
-    db.close_connection(CONNECTION)
 
   ## database items ##
-  CONNECTION = db.get_connection(DB_FILENAME)
-  CURSOR = db.get_cursor(CONNECTION)
-
   ITEMS = db.get_all_items(CURSOR)
-  db.close_connection(CONNECTION)
 
   # modify Unix timestamp to human readable value #
   for i in range(len(ITEMS)):
