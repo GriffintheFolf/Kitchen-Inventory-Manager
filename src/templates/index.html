@@ -42,14 +42,12 @@
 
     <main>
       {% if alert != "" %}
-      <dialog open>
-        <article>
-          <h3>Error!</h3>
-          <p>
-            {{alert}}
-          <p>
-        </article>
-      </dialog>
+      <article>
+        <h3>Error!</h3>
+        <p>
+          {{alert}}
+        <p>
+      </article>
       {% endif %}
 
       <h1>Add Item</h1>
