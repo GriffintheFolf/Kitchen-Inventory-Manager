@@ -29,10 +29,29 @@
             </a>
           </li>
         </ul>
+
+        <ul>
+          <li>
+            <a href="#">
+              Help
+            </a>
+          </li>
+        </ul>
       </nav>
     </header>
 
     <main>
+      {% if alert != "" %}
+      <dialog open>
+        <article>
+          <h3>Error!</h3>
+          <p>
+            {{alert}}
+          <p>
+        </article>
+      </dialog>
+      {% endif %}
+
       <h1>Add Item</h1>
 
       <form method="POST" action="/">
@@ -47,7 +66,7 @@
         </label>
 
         <label for="unit_weight">
-          Unit weight:
+          Unit weight (grams):
           <input type="text" name="unit_weight" required>
         </label>
 
@@ -78,7 +97,7 @@
           <tr>
             <td>{{item[0]}}</td>
             <td>{{item[1]}}</td>
-            <td>{{item[2]}}</td>
+            <td>{{item[2]}} g</td>
             <td>{{item[3]}}</td>
             <td>{{item[4]}}</td>
           </tr>

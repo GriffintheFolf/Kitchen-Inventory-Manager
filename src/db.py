@@ -15,6 +15,27 @@ import pathlib
 
 ### subroutines ###
 
+## input ##
+def add_item(CONNECTION, CURSOR, DATA):
+  """
+  Add an item to the database.
+
+  Args:
+    CONNECTION (object):
+    CURSOR (object):
+    DATA (list): list containing the product name, unit count,
+                 unit weight, expiration date, and barcode
+  """
+
+  CURSOR.execute("""
+    INSERT INTO
+      pantry
+    VALUES(
+      ?, ?, ?, ?, ?
+    )
+  ;""", DATA)
+  CONNECTION.commit()
+
 ## processing ##
 def does_exist(DB_FILENAME):
   """
@@ -108,6 +129,30 @@ def init_db(CONNECTION, CURSOR):
   CONNECTION.commit()
 
 ## output ##
+def get_one_item(CURSOR, BARCODE):
+  """
+  Returns the specified item from the database, determined by the
+  primary key - in this case the barcode number.
+
+  Args:
+    CURSOR (object):
+    BARCODE (str): the barcode number
+
+  Returns:
+    ITEM (list): the item in the database
+  """
+
+  ITEM = CURSOR.execute("""
+    SELECT
+      *
+    FROM
+      pantry
+    WHERE
+      barcode_number = ?
+  ;""", [BARCODE]).fetchone()
+
+  return ITEM
+
 def get_all_items(CURSOR):
   """
   Returns all items presently in the database.
