@@ -80,7 +80,7 @@ def expiring():
   CONNECTION = db.get_connection(DB_FILENAME)
   CURSOR = db.get_cursor(CONNECTION)
 
-  ITEMS = db.get_all_items(CURSOR)
+  ITEMS = db.get_all_items_by_expiry(CURSOR)
   # modify Unix timestamp to human readable value #
   for i in range(len(ITEMS)):
     DATETIME_DATE = datetime.datetime.fromtimestamp(ITEMS[i][3])

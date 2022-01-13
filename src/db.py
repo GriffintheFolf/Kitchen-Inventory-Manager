@@ -175,6 +175,29 @@ def get_all_items(CURSOR):
 
   return ITEMS
 
+def get_all_items_by_expiry(CURSOR):
+  """
+  The same as get_all_items(), but ordered by expiration
+  date instead.
+
+  Args:
+    CURSOR (object):
+
+  Returns:
+    ITEMS (list): list of items in the database.
+  """
+
+  ITEMS = CURSOR.execute("""
+    SELECT
+      *
+    FROM
+      pantry
+    ORDER BY
+      expiration_date
+  ;""").fetchall()
+
+  return ITEMS
+
 ### "__main__ escape" ###
 if __name__ == "__main__":
   pass
