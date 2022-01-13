@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Expiring Soon | Kitchen Inventory Manager</title>
+
+    <link rel="stylesheet" href="/static/css/pico.classless.min.css">
+  </head>
+
+  <body>
+    <!--
+      Required for flask to display inline HTML correctly, see
+      https://stackoverflow.com/questions/35215842/render-html-strings-in-flask-templates
+    -->
+    
+
+    <header>
+      <h1>Kitchen Pantry Manager</h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="/">
+              Home
+            </a>
+          </li>
+
+          <li>
+            Expiring Soonest
+          </li>
+
+          <li>
+            <a href="#">
+              Is There Enough?
+            </a>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <a href="#">
+              Help!
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Expiring Soonest</h1>
+      <p>
+        This list sorts the food items by their expiration date.
+        Items expiring sooner appear closer to the top.<br><br>
+
+        If an item is past its date, it will appear in <span style="color:red;"><b>red</b></span>.
+      </p>
+
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Item Count</th>
+          <th>Unit Weight</th>
+          <th>Expiration Date</th>
+          <th>Barcode</th>
+
+          {% for item in pantry %}
+          <tr>
+            <td>{{item[0]}}</td>
+            <td>{{item[1]}}</td>
+            <td>{{item[2]}} g</td>
+            <td>{{item[3]}}</td>
+            <td>{{item[4]}}</td>
+          </tr>
+          {% endfor %}
+        </tr>
+      </table>
+    </main>
+  </body>
+</html>

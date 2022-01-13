@@ -13,10 +13,11 @@ the pages.
 It also handles some form processing.
 """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 import src.db as db
 
 import datetime
+import time
 from sqlite3 import IntegrityError
 
 ### other variables ###
@@ -25,10 +26,9 @@ DB_FILENAME = "inventory.db"
 ### Flask-related variables ###
 APPLICATION = Flask(__name__)
 
-## page routing ##
-@APPLICATION.route("/", methods=["GET", "POST"])
-
 ## page definitions ##
+
+@APPLICATION.route("/", methods=["GET", "POST"])
 def index():
   """
   The main page of the website (index.html).
@@ -71,6 +71,31 @@ def index():
 
   return render_template("index.html", alert=ALERT, pantry=ITEMS)
 
+@APPLICATION.route("/expiring")
+def expiring():
+  """
+  The page sorting by expiration date (expiring.html).
+  """
+
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  ITEMS = db.get_all_items(CURSOR)
+  # modify Unix timestamp to human readable value #
+  for i in range(len(ITEMS)):
+    DATETIME_DATE = datetime.datetime.fromtimestamp(ITEMS[i][3])
+
+    # if expiration date is past the present day, mark the text as red
+    if time.time() > DATETIME_DATE.timestamp():
+      DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "<span style='color:red;'><b>%Y-%m-%d</b></span>")
+    else:
+      DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "%Y-%m-%d")
+
+    # rather annoyingly, SQLite returns a list of tuples ...
+    ITEMS[i] = (ITEMS[i][0], ITEMS[i][1], ITEMS[i][2], DATETIME_DATE, ITEMS[i][4])
+
+  return render_template("expiring.html", pantry=ITEMS)
+
 ### subroutines ###
 def start_flask():
   """
@@ -78,6 +103,14 @@ def start_flask():
   """
 
   global APPLICATION
+
+  """
+  Required to allow inline HTML to display correctly, see
+  https://stackoverflow.com/questions/62151238/how-to-set-the-jinja-environment-variable-in-flask
+
+  Be mindful that this is very likely a security risk that allows for cross-side scripting (XSS)!
+  """
+  APPLICATION.jinja_options["autoescape"] = False
   APPLICATION.run(debug=True)
 
 ### "__main__ escape" ###
