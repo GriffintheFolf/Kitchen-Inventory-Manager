@@ -83,7 +83,7 @@
         <p>
           {{alert}}<br><br>
 
-          You will have {{remaining}} units remaining.
+          You will have <b>{{remaining}}</b> units remaining.
         <p>
       </article>
       {% endif %}
@@ -94,7 +94,7 @@
         <p>
           {{alert}}<br><br>
 
-          You will need to buy {{remaining}} units of this item.
+          You will need to buy <b>{{remaining}}</b> units of this item.
         </p>
       </article>
       {% endif %}
@@ -105,7 +105,7 @@
         Select an item and enter how many grams you need.
       </p>
 
-      <form method="POST" autocomplete="off">
+      <form method="POST" action="/enough" autocomplete="off">
         <label for="selected_item">
           Item:
 

@@ -95,7 +95,7 @@ def expiring():
 
   return render_template("expiring.html", pantry=ITEMS)
 
-@APPLICATION.route("/enough")
+@APPLICATION.route("/enough", methods=["GET", "POST"])
 def enough():
   """
   The page to check if there is enough of an ingredient (enough.html).
@@ -110,6 +110,37 @@ def enough():
 
   CONNECTION = db.get_connection(DB_FILENAME)
   CURSOR = db.get_cursor(CONNECTION)
+
+  if request.form:
+    SELECTED_ITEM = request.form.get("selected_item")
+    AMOUNT_NEEDED = request.form.get("amount_needed")
+    AMOUNT_NEEDED = float(AMOUNT_NEEDED)
+
+    ITEM = db.get_one_item(CURSOR, SELECTED_ITEM)
+
+    # total amount of grams available - the simplest check
+    UNIT_COUNT = ITEM[1]
+    UNIT_WEIGHT = ITEM[2]
+    TOTAL_AVAILABLE = UNIT_COUNT * UNIT_WEIGHT
+    #print(TOTAL_AVAILABLE)
+    #print(AMOUNT_NEEDED)
+
+    if AMOUNT_NEEDED > TOTAL_AVAILABLE:
+      ENOUGH = False
+      ALERT = "You do not have enough of this item."
+
+      # determine how many units are needed to have enough
+      DIFFERENCE = AMOUNT_NEEDED - TOTAL_AVAILABLE
+      #print(DIFFERENCE)
+      REMAINING = DIFFERENCE / UNIT_WEIGHT
+    else:
+      # if there is enough #
+      ENOUGH = True
+      ALERT = "You have enough of this item."
+
+      # determine how many units will remain after use #
+      TOTAL_AFTER = TOTAL_AVAILABLE - AMOUNT_NEEDED
+      REMAINING = TOTAL_AFTER / UNIT_WEIGHT
 
   ## database items ##
   ITEMS = db.get_all_items(CURSOR)
