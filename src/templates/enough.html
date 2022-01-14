@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Expiring Soon | Kitchen Inventory Manager</title>
+    <title>Is There Enough? | Kitchen Inventory Manager</title>
 
     <link rel="stylesheet" href="/static/css/pico.classless.min.css">
 
@@ -56,13 +56,13 @@
           </li>
 
           <li>
-            Expiring Soonest
+            <a href="{{ url_for('expiring') }}">
+              Expiring Soonest
+            </a>
           </li>
 
           <li>
-            <a href="{{ url_for('enough') }}">
-              Is There Enough?
-            </a>
+            Is There Enough?
           </li>
         </ul>
 
@@ -77,33 +77,52 @@
     </header>
 
     <main>
-      <h1>Expiring Soonest</h1>
-      <p>
-        This list sorts the food items by their expiration date.
-        Items expiring sooner appear closer to the top.<br><br>
+      {% if alert != "" and enough == True %}
+      <article>
+        <h3>Yes!</h3>
+        <p>
+          {{alert}}<br><br>
 
-        If an item is past its date, it will appear in <span style="color:red;"><b>red</b></span>.
+          You will have {{remaining}} units remaining.
+        <p>
+      </article>
+      {% endif %}
+
+      {% if alert != "" and enough == False %}
+      <article>
+        <h3>Unfortunately, no.</h3>
+        <p>
+          {{alert}}<br><br>
+
+          You will need to buy {{remaining}} units of this item.
+        </p>
+      </article>
+      {% endif %}
+
+      <h1>Is There Enough?</h1>
+
+      <p>
+        Select an item and enter how many grams you need.
       </p>
 
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Item Count</th>
-          <th>Unit Weight</th>
-          <th>Expiration Date</th>
-          <th>Barcode</th>
+      <form method="POST" autocomplete="off">
+        <label for="selected_item">
+          Item:
 
-          {% for item in pantry %}
-          <tr>
-            <td>{{item[0]}}</td>
-            <td>{{item[1]}}</td>
-            <td>{{item[2]}} g</td>
-            <td>{{item[3]}}</td>
-            <td>{{item[4]}}</td>
-          </tr>
-          {% endfor %}
-        </tr>
-      </table>
+          <select name="selected_item" required>
+            {% for item in pantry %}  
+            <option value="{{item[4]}}">{{item[0]}}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label for="amount_needed">
+          Amount needed (grams):
+          <input type="text" name="amount_needed" required>
+        </label>
+
+        <input type="submit" value="Check">
+      </form>      
     </main>
   </body>
 </html>

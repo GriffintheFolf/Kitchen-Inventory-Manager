@@ -27,7 +27,6 @@ DB_FILENAME = "inventory.db"
 APPLICATION = Flask(__name__)
 
 ## page definitions ##
-
 @APPLICATION.route("/", methods=["GET", "POST"])
 def index():
   """
@@ -95,6 +94,27 @@ def expiring():
     ITEMS[i] = (ITEMS[i][0], ITEMS[i][1], ITEMS[i][2], DATETIME_DATE, ITEMS[i][4])
 
   return render_template("expiring.html", pantry=ITEMS)
+
+@APPLICATION.route("/enough")
+def enough():
+  """
+  The page to check if there is enough of an ingredient (enough.html).
+  """
+
+  ALERT = ""
+  ENOUGH = False
+
+  # N.B. this variable is also used to say how many of an ingredient are needed
+  # if there are not enough already
+  REMAINING = 0.0
+
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  ## database items ##
+  ITEMS = db.get_all_items(CURSOR)
+
+  return render_template("enough.html", alert=ALERT, enough=ENOUGH, remaining=REMAINING, pantry=ITEMS)
 
 ### subroutines ###
 def start_flask():
