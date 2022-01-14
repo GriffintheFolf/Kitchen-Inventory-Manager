@@ -5,6 +5,42 @@
     <title>Expiring Soon | Kitchen Inventory Manager</title>
 
     <link rel="stylesheet" href="/static/css/pico.classless.min.css">
+
+    <!-- Pico CSS overrides -->
+    <style>
+      @media (min-width: 576px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.125);
+        }
+      }
+      @media (min-width: 768px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.25);
+        }
+      }
+      @media (min-width: 992px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.5);
+        }
+      }
+      @media (min-width: 1200px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.75);
+        }
+      }
+    </style>
   </head>
 
   <body>
