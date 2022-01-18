@@ -47,6 +47,15 @@ def index():
     EXPIRATION_DATE = request.form.get("expiration_date")
     BARCODE_NUMBER = request.form.get("barcode_number")
 
+    ## strip unit weight to just the raw number ##
+    try:
+      # see https://stackoverflow.com/questions/3939361/remove-specific-characters-from-a-string-in-python
+      # could probably just use regex, but i don't know how it works
+      UNIT_WEIGHT = UNIT_WEIGHT.translate({ord(c): None for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+{}|:\"<>?`-=[]\\;',/"})
+      UNIT_WEIGHT = float(UNIT_WEIGHT)
+    except ValueError:
+      ALERT = "Unit amount is not a valid number!"
+
     ## add the item ##
     DATE_FORM = datetime.datetime.strptime(EXPIRATION_DATE, "%Y-%m-%d")
     DATE_FORM = int(datetime.datetime.timestamp(DATE_FORM))
