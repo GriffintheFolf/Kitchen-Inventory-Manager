@@ -113,6 +113,8 @@ def init_db(CONNECTION, CURSOR):
     it is stored as a REAL to allow for partial containers (e.g. 0.5 of a box)
   - the expiration date is stored as an INT object as the number of seconds since
     the Unix epoch (January 1, 1970, 00:00:00 UTC)
+  - the barcode number is stored as a string to avoid stripping of zeroes at the
+    beginning
   """
 
   CURSOR.execute("""
@@ -122,7 +124,7 @@ def init_db(CONNECTION, CURSOR):
         product_count REAL NOT NULL,
         unit_weight REAL NOT NULL,
         expiration_date INT NOT NULL,
-        barcode_number INT PRIMARY KEY
+        barcode_number TEXT PRIMARY KEY
       )
   ;""")
 
