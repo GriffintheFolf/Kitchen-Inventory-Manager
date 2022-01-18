@@ -156,6 +156,23 @@ def enough():
 
   return render_template("enough.html", alert=ALERT, enough=ENOUGH, remaining=REMAINING, pantry=ITEMS)
 
+@APPLICATION.route("/edit/<BARCODE>", methods=["GET", "POST"])
+def edit(BARCODE):
+  """
+  The page to edit information for an item (edit.html).
+
+  No actual form submission is handled here, edit_action does that.
+  """
+
+  ALERT = ""
+
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  ITEM = db.get_one_item(CURSOR, BARCODE)
+
+  return render_template("/edit.html", alert=ALERT, item=ITEM)
+
 ### subroutines ###
 def start_flask():
   """
