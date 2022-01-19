@@ -131,8 +131,6 @@ def enough():
     UNIT_COUNT = ITEM[1]
     UNIT_WEIGHT = ITEM[2]
     TOTAL_AVAILABLE = UNIT_COUNT * UNIT_WEIGHT
-    #print(TOTAL_AVAILABLE)
-    #print(AMOUNT_NEEDED)
 
     if AMOUNT_NEEDED > TOTAL_AVAILABLE:
       ENOUGH = False
@@ -140,7 +138,6 @@ def enough():
 
       # determine how many units are needed to have enough
       DIFFERENCE = AMOUNT_NEEDED - TOTAL_AVAILABLE
-      #print(DIFFERENCE)
       REMAINING = DIFFERENCE / UNIT_WEIGHT
     else:
       # if there is enough #
