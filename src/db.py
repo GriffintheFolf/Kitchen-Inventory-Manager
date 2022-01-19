@@ -94,6 +94,31 @@ def close_connection(CONNECTION):
 
   CONNECTION.close()
 
+def update_item(CONNECTION, CURSOR, DATA):
+  """
+  Updates an item in the database by barcode.
+
+  Args:
+    CONNECTION (object):
+    CURSOR (object):
+    DATA (list): new data to insert
+  """
+
+  # f-strings are not the best idea, but it is only used for
+  # a barcode which the user cannot easily change
+  CURSOR.execute("""
+    UPDATE
+      pantry
+    SET
+      product_name = ?,
+      product_count = ?,
+      unit_weight = ?,
+      expiration_date = ?
+    WHERE
+      barcode_number = ?
+  ;""", DATA)
+  CONNECTION.commit()
+
 def init_db(CONNECTION, CURSOR):
   """
   Initialize the database file.

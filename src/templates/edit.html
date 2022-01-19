@@ -93,31 +93,31 @@
       <p>
         Enter the properties you would like to change.
 
-        The placeholder values in the text fields represent the current values.
+        The values within the fields represent the currently set values.
       </p>
 
       <form method="POST" action="/edit_action" autocomplete="off">
         <label for="product_name">
           Product name:
-          <input type="text" name="product_name" placeholder="{{item[0]}}">
+          <input type="text" name="product_name" value="{{item[0]}}">
         </label>
 
         <label for="item_count">
           Item count:
-          <input type="text" name="item_count" placeholder="{{item[1]}}">
+          <input type="text" name="item_count" value="{{item[1]}}">
         </label>
 
         <label for="unit_weight">
           Unit amount:
-          <input type="text" name="unit_weight" placeholder="{{item[2]}}">
+          <input type="text" name="unit_weight" value="{{item[2]}}">
         </label>
 
         <label for="expiration_date">
           Expiration date:
-          <input type="date" name="expiration_date">
+          <input type="date" name="expiration_date" value="{{item[3]}}">
         </label>
 
-        <input type="hidden" value="{{item[4]}}">
+        <input type="hidden" name="barcode_number" value="{{item[4]}}">
 
         <input type="submit" value="Change">
       </form>

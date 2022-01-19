@@ -13,7 +13,7 @@ the pages.
 It also handles some form processing.
 """
 
-from flask import Flask, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for
 import src.db as db
 
 import datetime
@@ -171,7 +171,39 @@ def edit(BARCODE):
 
   ITEM = db.get_one_item(CURSOR, BARCODE)
 
+  # convert Unix timestamp to human-readable form #
+  DATETIME_DATE = datetime.datetime.fromtimestamp(ITEM[3])
+  DATETIME_TEXT = datetime.datetime.strftime(DATETIME_DATE, "%Y-%m-%d")
+  ITEM = (ITEM[0], ITEM[1], ITEM[2], DATETIME_TEXT, ITEM[4])
+
   return render_template("/edit.html", alert=ALERT, item=ITEM)
+
+@APPLICATION.route("/edit_action", methods=["GET", "POST"])
+def edit_action():
+  """
+  The actions for editing an item in the database.
+  """
+
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  if request.form:
+    PRODUCT_NAME = request.form.get("product_name")
+    ITEM_COUNT = request.form.get("item_count")
+    UNIT_AMOUNT = request.form.get("unit_weight")
+    EXPIRATION_DATE = request.form.get("expiration_date")
+    BARCODE_NUMBER = request.form.get("barcode_number")
+
+    # convert human-readable form back to Unix timestamp #
+    DATETIME_DATE = datetime.datetime.strptime(EXPIRATION_DATE, "%Y-%m-%d")
+    EXPIRATION_DATE = DATETIME_DATE.timestamp()
+
+    DATA = [PRODUCT_NAME, ITEM_COUNT, UNIT_AMOUNT, EXPIRATION_DATE, BARCODE_NUMBER]
+    db.update_item(CONNECTION, CURSOR, DATA)
+
+    db.close_connection(CONNECTION)
+
+  return redirect("/")
 
 ### subroutines ###
 def start_flask():
