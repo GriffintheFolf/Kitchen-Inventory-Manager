@@ -90,12 +90,20 @@ def expiring():
 
   ITEMS = db.get_all_items_by_expiry(CURSOR)
   # modify Unix timestamp to human readable value #
+  TWO_WEEKS = (86400 * 14)
+  TWO_WEEKS_FROM_NOW = time.time() + TWO_WEEKS
+
   for i in range(len(ITEMS)):
     DATETIME_DATE = datetime.datetime.fromtimestamp(ITEMS[i][3])
 
     # if expiration date is past the present day, mark the text as red
     if time.time() > DATETIME_DATE.timestamp():
       DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "<span style='color:red;'><b>%Y-%m-%d</b></span>")
+
+    # if the item will expire within two weeks (threshold specified by client), mark in orange
+    elif (DATETIME_DATE.timestamp() - time.time()) < TWO_WEEKS:
+      DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "<span style='color:orange;'><b>%Y-%m-%d</b></span>")
+
     else:
       DATETIME_DATE = datetime.datetime.strftime(DATETIME_DATE, "%Y-%m-%d")
 
