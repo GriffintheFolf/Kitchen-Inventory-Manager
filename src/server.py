@@ -161,6 +161,7 @@ def enough():
 
   return render_template("enough.html", alert=ALERT, enough=ENOUGH, remaining=REMAINING, pantry=ITEMS)
 
+
 @APPLICATION.route("/edit/<BARCODE>", methods=["GET", "POST"])
 def edit(BARCODE):
   """
@@ -207,6 +208,24 @@ def edit_action():
     db.update_item(CONNECTION, CURSOR, DATA)
 
     db.close_connection(CONNECTION)
+
+  return redirect("/")
+
+
+@APPLICATION.route("/delete/<BARCODE>")
+def delete(BARCODE):
+  """
+  Deletes an item from the database.
+
+  Args:
+    BARCODE (str): the barcode of the item to delete
+  """
+
+  CONNECTION = db.get_connection(DB_FILENAME)
+  CURSOR = db.get_cursor(CONNECTION)
+
+  db.delete_item(CONNECTION, CURSOR, BARCODE)
+  db.close_connection(CONNECTION)
 
   return redirect("/")
 

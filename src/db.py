@@ -104,8 +104,6 @@ def update_item(CONNECTION, CURSOR, DATA):
     DATA (list): new data to insert
   """
 
-  # f-strings are not the best idea, but it is only used for
-  # a barcode which the user cannot easily change
   CURSOR.execute("""
     UPDATE
       pantry
@@ -117,6 +115,27 @@ def update_item(CONNECTION, CURSOR, DATA):
     WHERE
       barcode_number = ?
   ;""", DATA)
+  CONNECTION.commit()
+
+def delete_item(CONNECTION, CURSOR, BARCODE):
+  """
+  Deletes an item in the database by barcode.
+
+  Args:
+    CONNECTION (object):
+    CURSOR (object):
+    BARCODE (str): item to remove
+  """
+
+  # f-strings are not the best idea, but for some reason SQLite DOES NOT
+  # like me specifying the barcode as a binding; it errors saying I have specified
+  # too many, when there is only one being specified...
+  CURSOR.execute(f"""
+    DELETE FROM
+      pantry
+    WHERE
+      barcode_number = {BARCODE}
+  ;""")
   CONNECTION.commit()
 
 def init_db(CONNECTION, CURSOR):

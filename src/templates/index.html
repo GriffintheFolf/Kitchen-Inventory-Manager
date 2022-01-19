@@ -127,6 +127,9 @@
           <th>Expiration Date</th>
           <th>Barcode</th>
 
+          <th></th>
+          <th></th>
+
           {% for item in pantry %}
           <tr>
             <td>{{item[0]}}</td>
@@ -137,6 +140,9 @@
 
             <td>
               <a href="/edit/{{item[4]}}">Edit</a>
+            </td>
+            <td>
+              <a href="/delete/{{item[4]}}" style="color:red;">Delete</a>
             </td>
           </tr>
           {% endfor %}
