@@ -17,6 +17,7 @@ from flask import Flask, redirect, render_template, request, url_for
 import src.db as db
 
 import datetime
+import html
 import time
 from sqlite3 import IntegrityError
 
@@ -47,12 +48,21 @@ def index():
     EXPIRATION_DATE = request.form.get("expiration_date")
     BARCODE_NUMBER = request.form.get("barcode_number")
 
-    ## strip unit weight to just the raw number ##
+    ## this is *VERY IMPORTANT* to mitigate XSS, as inline HTML is on ##
+    PRODUCT_NAME = html.escape(PRODUCT_NAME)
+    UNIT_COUNT = html.escape(UNIT_COUNT)
+    UNIT_WEIGHT = html.escape(UNIT_WEIGHT)
+    EXPIRATION_DATE = html.escape(EXPIRATION_DATE)
+    BARCODE_NUMBER = html.escape(BARCODE_NUMBER)
+
+    ## strip unit weight and product count to just the raw number ##
     try:
       # see https://stackoverflow.com/questions/3939361/remove-specific-characters-from-a-string-in-python
       # could probably just use regex, but i don't know how it works
       UNIT_WEIGHT = UNIT_WEIGHT.translate({ord(c): None for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+{}|:\"<>?`-=[]\\;',/"})
       UNIT_WEIGHT = float(UNIT_WEIGHT)
+      UNIT_COUNT = UNIT_COUNT.translate({ord(c): None for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+{}|:\"<>?`-=[]\\;',/"})
+      UNIT_COUNT = float(UNIT_COUNT)
     except ValueError:
       ALERT = "Unit amount is not a valid number!"
 
@@ -131,7 +141,16 @@ def enough():
   if request.form:
     SELECTED_ITEM = request.form.get("selected_item")
     AMOUNT_NEEDED = request.form.get("amount_needed")
-    AMOUNT_NEEDED = float(AMOUNT_NEEDED)
+
+    ## strip needed amount to just the raw number ##
+    AMOUNT_NEEDED = html.escape(AMOUNT_NEEDED)
+    try:
+      # see https://stackoverflow.com/questions/3939361/remove-specific-characters-from-a-string-in-python
+      # could probably just use regex, but i don't know how it works
+      AMOUNT_NEEDED = AMOUNT_NEEDED.translate({ord(c): None for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+{}|:\"<>?`-=[]\\;',/"})
+      AMOUNT_NEEDED = float(AMOUNT_NEEDED)
+    except ValueError:
+      ALERT = "Amount needed is not a valid number!"
 
     ITEM = db.get_one_item(CURSOR, SELECTED_ITEM)
 
