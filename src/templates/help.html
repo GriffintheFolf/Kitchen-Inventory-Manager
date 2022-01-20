@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Help! | Kitchen Inventory Manager</title>
+
+    <link rel="stylesheet" href="/static/css/pico.classless.min.css">
+
+    <!-- Pico CSS overrides -->
+    <style>
+      @media (min-width: 576px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.125);
+        }
+      }
+      @media (min-width: 768px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.25);
+        }
+      }
+      @media (min-width: 992px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.5);
+        }
+      }
+      @media (min-width: 1200px) {
+        body > header,
+      body > main,
+      body > footer,
+      section {
+          --block-spacing-vertical: calc(var(--spacing) * 0.75);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Kitchen Pantry Manager</h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="/">
+              Home
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ url_for('expiring') }}">
+              Expiring Soonest
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ url_for('enough') }}">
+              Is There Enough?
+            </a>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            Help!
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h1>How to Use the Kitchen Inventory Manager</h1>
+
+      <p>
+        This program was designed to be easy for almost anyone to utilize;
+        nevertheless, a brief tutorial on how the program works is provided here
+        to clarify some of its terminology.
+      </p>
+
+      <h2>Adding an Item</h2>
+
+      <p>
+        The <b>product name</b> is the name of the food item you want to add.
+        It can be either a specific name, with the brand, or a generic name; it does not
+        matter which.
+      </p>
+
+      <p>
+        The <b>item count</b> is the amount of "containers" you have of an item.
+        For example, with three boxes of crackers, you will have an item count of 3.
+        The item count allows for decimal numbers, for example, if you have only half of
+        one box of crackers, the item count is 0.5.
+      </p>
+
+      <p>
+        The <b>unit amount</b> is the amount of the item per container. Most often, this
+        is the weight measured in grams, but can also be the volume in millilitres for liquids.
+        In theory, any metric unit should work here. For example, if one bottle of olive oil contains
+        1000 mL, the unit amount is 1000, specified <em>without</em> units after the number.
+      </p>
+
+      <p>
+        The <b>expiration date</b> should be self-explanatory.
+      </p>
+
+      <p>
+        The <b>barcode number</b> should be the same as the barcode number on the item's
+        packaging.
+      </p>
+
+      <p>
+        All of these values <strong>must</strong> be specified to add the item into the database.
+      </p>
+
+      <h2>Viewing Items</h2>
+
+      <p>
+        On the main page of the program, below the form to add an item, there is a table
+        consisting of all items presently within the database.
+      </p>
+
+      <p>
+        The tabel displays the product name, item count, unit amount, expiration date, and
+        barcode number. The table is sorted by the product name in "ASCIIbetical" order;
+        capital letters come before lowercase letters.
+      </p>
+
+      <h2>Editing Items</h2>
+
+      <p>
+        Located next to the barcode number of the item in the main table is a link stating
+        "Edit". Clicking on it will allow you to edit the name, item count, unit amount,
+        and expiration date of the item.
+      </p>
+
+      <p>
+        The barcode number <em>cannot</em> be modified, because it is how each item is
+        uniquely represented within the database.
+      </p>
+
+      <h2>Deleting Items</h2>
+
+      <p>
+        Clicking the link labelled "Delete" next to an item in the main table will
+        <em>immediately</em> delete that item from the database.
+        <strong>There is no confirmation prompt (yet)!</strong>
+      </p>
+    </main>
+  </body>
+</html>

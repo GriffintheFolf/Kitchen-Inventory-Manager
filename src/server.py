@@ -248,6 +248,15 @@ def delete(BARCODE):
 
   return redirect("/")
 
+
+@APPLICATION.route("/help")
+def help():
+  """
+  The help page (help.html).
+  """
+
+  return render_template("/help.html")
+
 ### subroutines ###
 def start_flask():
   """
